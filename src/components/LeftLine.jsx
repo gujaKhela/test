@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Icon from "../assets/Icon.png";
 import Todo from "../assets/TO-DO.png";
 import Tasks from "../assets/tasks.png";
@@ -29,12 +28,15 @@ const LeftLine = () => {
         </div>
       </div>
 
-      <Link to="/completed" className="w-[380px] bg-[#C4DCD3] ">
+      <div className="w-[380px] bg-[#C4DCD3] ">
+        <Link to="/completed" >
+        
         <div className="flex items-center m-5 py-2">
           <img src={Completed} alt="Completed-icon" className="w-6 h-6 object-cover" />
           <p className="px-5">completed</p>
         </div>
-      </Link>
+        </Link>
+      </div>
     </div>
   );
 };
