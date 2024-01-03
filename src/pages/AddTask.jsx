@@ -10,7 +10,7 @@ const AddTask = () => {
 <div className="flex">
 
 <LeftLine />
-<HeaderLine  />
+<HeaderLine  hasImage={true}/>
 </div>
       <AddTaskComponent className=""  />
      
