@@ -8,7 +8,7 @@ const AddTask = () => {
     <>
       <div className="flex">
         <LeftLine />
-        <HeaderLine  />
+        <HeaderLine has_text={true} textContent="Imporatnt Tasks" />
       </div>
     </>
   );

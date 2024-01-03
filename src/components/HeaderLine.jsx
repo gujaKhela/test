@@ -7,7 +7,7 @@ export const HeaderLine = ({ has_text = false, textContent = false, hasImage = f
       
       {hasImage? <img src={Star} alt="settings-icon" className="" />:null}
       
-      {has_text ? <p className="text-left">{textContent} </p> : null}
+      {has_text ? <p className="text-left ml-10 text-xl	font-medium">{textContent} </p> : null}
     </div>
   );
 };
