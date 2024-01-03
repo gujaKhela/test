@@ -1,15 +1,53 @@
-import React from "react";
-import PlusSign from "../assets/plus_sign.png";
+import { useEffect, useState } from "react";
+import TaskForm from "./TaskForm";
+import AddTaskButton from "./AddTaskButton";
+import UseLocalStorage from "./UseLocalStorage";
 
 const AddTaskComponent = () => {
+  const [isInputVisible, setInputVisible] = useState(false);
+  const [tasks, setTasks] = UseLocalStorage("tasks", []);
+  const [task, setTask] = useState({ input: "", date: "" });
+
+  const addTaskInput = () => {
+    setInputVisible(true);
+  };
+
+  const updateTasks = (newTask) => {
+    setTasks((prevTasks) => {
+      const updatedTasks = [...prevTasks, newTask];
+      localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+      return updatedTasks;
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (task.input && task.date) {
+      const newTask = { ...task };
+      updateTasks(newTask);
+
+      setInputVisible(false);
+      setTask({ input: "", date: "" });
+    }
+  };
+
+  console.log(tasks)
   return (
-    <div className="w-[266px] h-[236px] bg-[#C4DCD3] flex justify-center rounded-lg absolute left-[420px] top-36">
-      <div className="">
-        <p className=" my-8 text-center text-2xl text-[#34574A]">add a task</p>
-        <img src={PlusSign} alt="plus sign img" className="my-8 mx-auto" />
-      </div>
-    </div>
+    <>
+      <AddTaskButton onClick={addTaskInput} />
+
+      {isInputVisible && (
+        <TaskForm
+          onSubmit={handleSubmit}
+          task={task}
+          onInputChange={(e) => setTask({ ...task, input: e.target.value })}
+          onDateChange={(e) => setTask({ ...task, date: e.target.value })}
+        />
+      )}
+    </>
   );
 };
+
 
 export default AddTaskComponent;

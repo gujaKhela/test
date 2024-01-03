@@ -15,10 +15,14 @@ const LeftLine = () => {
 
   return (
     <div className="w-[380px] h-screen bg-[#DBEADD] ">
+        <Link to="/">
       <div className="w-[300px] flex place-content-around py-8">
+        
         <img src={Icon} alt="icon" />
         <img src={Todo} alt="Todo" />
+      
       </div>
+      </Link>
 
       <Link to="/" className={`w-[380px] ${
           isTasksPage ? "bg-[#D9D9D9]" : "bg-[#C4DCD3]"
