@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Delate from "../assets/completed.png";
 import UseLocalStorage from "./UseLocalStorage";
 import RedDelate from "../assets/redDelate.png";
@@ -8,7 +8,7 @@ const TaskList = ({ tasks, setTasks }) => {
   const [completedTasks, setCompletedTasks] = UseLocalStorage(
     "completedTasks",
     []
-  ); // Assuming you have a different key for completed tasks
+  );
 
   const handleMouseEnter = (taskId) => {
     setHoveredTask(taskId);
@@ -19,14 +19,30 @@ const TaskList = ({ tasks, setTasks }) => {
   };
 
   const updateCompleteTasks = (task) => {
-
     setCompletedTasks((prevCompletedTasks) => {
       const updatedCompletedTasks = [...prevCompletedTasks, { task: task }];
-      localStorage.setItem(
-        "completedTasks",
-        JSON.stringify(updatedCompletedTasks)
+      localStorage.setItem("completedTasks", JSON.stringify(updatedCompletedTasks));
+      return updatedCompletedTasks;
+    });
+  };
+
+  useEffect(() => {
+    // This useEffect runs whenever tasks are updated
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const handleDelete = (taskId) => {
+    // Update both tasks and completedTasks
+    setTasks((prevTasks) => {
+      const updatedTasks = prevTasks.filter((t) => t.id !== taskId);
+      return updatedTasks;
+    });
+
+    setCompletedTasks((prevCompletedTasks) => {
+      const updatedCompletedTasks = prevCompletedTasks.filter(
+        (completedTask) => completedTask.task.id !== taskId
       );
-    
+      localStorage.setItem("completedTasks", JSON.stringify(updatedCompletedTasks));
       return updatedCompletedTasks;
     });
   };
@@ -45,16 +61,13 @@ const TaskList = ({ tasks, setTasks }) => {
             onMouseLeave={handleMouseLeave}
           >
             <span>
-              <div className="font-semibold inline-block">Name</div> -{" "}
-              {task.input}{" "}
+              <div className="font-semibold inline-block">Name</div> - {task.input}{" "}
               <span className="ml-4">
                 {" "}
-                <div className="font-semibold inline-block">Date</div> -{" "}
-                {task.date}
+                <div className="font-semibold inline-block">Date</div> - {task.date}
               </span>
             </span>
-
-            <button onClick={() => updateCompleteTasks(task)}>
+            <button onClick={() => handleDelete(task.id)}>
               <img
                 src={hoveredTask === task.id ? RedDelate : Delate}
                 alt="delete btn"
@@ -67,9 +80,7 @@ const TaskList = ({ tasks, setTasks }) => {
     </div>
   ) : (
     <div className="absolute left-[420px] top-[26rem]">
-      <p className="text-center text-xl font-semibold">
-        Please add some task first
-      </p>
+      <p className="text-center text-xl font-semibold">Please add some task first</p>
     </div>
   );
 };
