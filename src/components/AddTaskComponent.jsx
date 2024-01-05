@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import TaskForm from "./TaskForm";
 import AddTaskButton from "./AddTaskButton";
 import UseLocalStorage from "./UseLocalStorage";
+import TaskList from "./TaskList";
 
 const AddTaskComponent = () => {
   const [isInputVisible, setInputVisible] = useState(false);
@@ -12,9 +13,13 @@ const AddTaskComponent = () => {
     setInputVisible(true);
   };
 
+  const generateUniqueId = () => {
+    return new Date().getTime().toString();
+  };
+
   const updateTasks = (newTask) => {
     setTasks((prevTasks) => {
-      const updatedTasks = [...prevTasks, newTask];
+      const updatedTasks = [...prevTasks,{...newTask,id:generateUniqueId()} ];
       localStorage.setItem("tasks", JSON.stringify(updatedTasks));
       return updatedTasks;
     });
@@ -32,7 +37,7 @@ const AddTaskComponent = () => {
     }
   };
 
-  console.log(tasks)
+  console.log(tasks);
   return (
     <>
       <AddTaskButton onClick={addTaskInput} />
@@ -45,9 +50,9 @@ const AddTaskComponent = () => {
           onDateChange={(e) => setTask({ ...task, date: e.target.value })}
         />
       )}
+      <TaskList tasks={tasks} setTasks={setTasks} />
     </>
   );
 };
-
 
 export default AddTaskComponent;
