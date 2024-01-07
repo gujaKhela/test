@@ -15,7 +15,7 @@ const AddTask = () => {
         <HeaderLine has_text={true} textContent="Completed Tasks" />
       </div>
       {completedTasks.length ? (
-        <div className="absolute left-[420px] top-[26rem]">
+        <div className="absolute left-[420px] top-[12rem]">
           <ul>
             <p className="text-center text-xl font-semibold text-[#34574A]">
               Completed Tasklist:
