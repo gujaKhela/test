@@ -18,31 +18,32 @@ const TaskList = ({ tasks, setTasks }) => {
     setHoveredTask(null);
   };
 
-  const updateCompleteTasks = (task) => {
-    setCompletedTasks((prevCompletedTasks) => {
-      const updatedCompletedTasks = [...prevCompletedTasks, { task: task }];
-      localStorage.setItem("completedTasks", JSON.stringify(updatedCompletedTasks));
-      return updatedCompletedTasks;
-    });
-  };
-
   useEffect(() => {
     // This useEffect runs whenever tasks are updated
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
+  useEffect(() => {
+    // This useEffect runs whenever completedTasks are updated
+    localStorage.setItem("completedTasks", JSON.stringify(completedTasks));
+  }, [completedTasks]);
+
   const handleDelete = (taskId) => {
-    // Update both tasks and completedTasks
+    // Update tasks
     setTasks((prevTasks) => {
       const updatedTasks = prevTasks.filter((t) => t.id !== taskId);
       return updatedTasks;
     });
 
+    // Update completedTasks
+    const deletedTask = tasks.find((t) => t.id === taskId);
+
     setCompletedTasks((prevCompletedTasks) => {
-      const updatedCompletedTasks = prevCompletedTasks.filter(
-        (completedTask) => completedTask.task.id !== taskId
-      );
-      localStorage.setItem("completedTasks", JSON.stringify(updatedCompletedTasks));
+      const updatedCompletedTasks = [
+        ...prevCompletedTasks,
+         deletedTask ,
+      ];
+
       return updatedCompletedTasks;
     });
   };
@@ -61,10 +62,12 @@ const TaskList = ({ tasks, setTasks }) => {
             onMouseLeave={handleMouseLeave}
           >
             <span>
-              <div className="font-semibold inline-block">Name</div> - {task.input}{" "}
+              <div className="font-semibold inline-block">Name</div> -{" "}
+              {task.input}{" "}
               <span className="ml-4">
                 {" "}
-                <div className="font-semibold inline-block">Date</div> - {task.date}
+                <div className="font-semibold inline-block">Date</div> -{" "}
+                {task.date}
               </span>
             </span>
             <button onClick={() => handleDelete(task.id)}>
@@ -80,7 +83,9 @@ const TaskList = ({ tasks, setTasks }) => {
     </div>
   ) : (
     <div className="absolute left-[420px] top-[26rem]">
-      <p className="text-center text-xl font-semibold">Please add some task first</p>
+      <p className="text-center text-xl font-semibold">
+        Please add some task first
+      </p>
     </div>
   );
 };
